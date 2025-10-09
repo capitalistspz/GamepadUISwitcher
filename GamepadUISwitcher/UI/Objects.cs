@@ -16,6 +16,102 @@ public static class Objects
         public const int OptionDescription = 41;
         public const int MenuButton = 45;
     }
+
+    public static GameObject CreateMenuButton(string buttonId, string label, MenuButton.MenuButtonType actionType,
+        Action<BaseEventData> submitAction)
+    {
+        var buttonObj = new GameObject(buttonId);
+
+        buttonObj.AddComponent<RectTransform>();
+        var menuButtonComp = buttonObj.AddComponent<MenuButton>();
+        menuButtonComp.buttonType = actionType;
+        menuButtonComp.navigation = new Navigation { mode = Navigation.Mode.Explicit };
+
+        var eventTriggerComp = buttonObj.AddComponent<EventTrigger>();
+        var triggerEntrySubmit = new EventTrigger.Entry();
+        triggerEntrySubmit.eventID = EventTriggerType.Submit;
+        triggerEntrySubmit.callback.AddListener(data =>
+        {
+            submitAction(data);
+        });
+        var triggerEntryClick = new EventTrigger.Entry();
+        triggerEntryClick.eventID = EventTriggerType.PointerClick;
+        triggerEntryClick.callback.AddListener(data =>
+        {
+            submitAction(data);
+        });
+        
+        eventTriggerComp.triggers.AddRange([triggerEntrySubmit, triggerEntryClick]);
+        {
+            var menuButtonTextObj = new GameObject("Menu Button Text");
+
+            var menuButtonTextTransform = menuButtonTextObj.AddComponent<RectTransform>();
+            menuButtonTextTransform.anchorMax = Vector2.one;
+            menuButtonTextTransform.anchorMin = Vector2.zero;
+            
+            var textComp = menuButtonTextObj.AddComponent<Text>();
+            textComp.font = MenuResources.TrajanProBold;
+            textComp.fontSize = FontSize.MenuButton;
+            textComp.lineSpacing = -0.33f;
+            textComp.text = label;
+            textComp.alignment = TextAnchor.MiddleCenter;
+
+            var fontScaleComp = menuButtonTextObj.AddComponent<ChangeTextFontScaleOnHandHeld>();
+            fontScaleComp.normalSize = FontSize.MenuButton;
+            fontScaleComp.handHeldSize = FontSize.MenuButton;
+
+            menuButtonTextObj.AddComponent<FixVerticalAlign>();
+            
+            var fitterComp = menuButtonTextObj.AddComponent<ContentSizeFitter>();
+            fitterComp.horizontalFit = ContentSizeFitter.FitMode.PreferredSize;
+            fitterComp.verticalFit = ContentSizeFitter.FitMode.Unconstrained;
+            
+            menuButtonTextObj.transform.SetParent(buttonObj.transform);
+            
+            {
+                var cursorRightObj = new GameObject("CursorRight");
+
+                var rectTransform = cursorRightObj.AddComponent<RectTransform>();
+                rectTransform.sizeDelta = new Vector2(164f, 119f);
+                rectTransform.anchorMin = new Vector2(1f, 0.5f);
+                rectTransform.anchorMax = new Vector2(1f, 0.5f);
+                rectTransform.anchoredPosition = new Vector2(70f, 0f);
+                rectTransform.localScale = new Vector2(-0.9f, 0.9f);
+
+                cursorRightObj.AddComponent<Image>();
+            
+                var animatorComp = cursorRightObj.AddComponent<Animator>();
+                animatorComp.runtimeAnimatorController = MenuResources.MenuCursorAnimator;
+                animatorComp.updateMode = AnimatorUpdateMode.UnscaledTime;
+            
+                menuButtonComp.rightCursor = animatorComp;
+                
+                cursorRightObj.transform.SetParent(menuButtonTextObj.transform, false);
+            }
+            {
+                var cursorLeftObj = new GameObject("CursorLeft");
+
+                var rectTransform = cursorLeftObj.AddComponent<RectTransform>();
+                rectTransform.sizeDelta = new Vector2(164f, 119f);
+                rectTransform.anchorMin = new Vector2(0f, 0.5f);
+                rectTransform.anchorMax = new Vector2(0f, 0.5f);
+                rectTransform.anchoredPosition = new Vector2(-70f, 0f);
+                rectTransform.localScale = new Vector2(0.9f, 0.9f);
+
+                cursorLeftObj.AddComponent<Image>();
+            
+                var animatorComp = cursorLeftObj.AddComponent<Animator>();
+                animatorComp.runtimeAnimatorController = MenuResources.MenuCursorAnimator;
+                animatorComp.updateMode = AnimatorUpdateMode.UnscaledTime;
+            
+                menuButtonComp.leftCursor = animatorComp;
+                
+                cursorLeftObj.transform.SetParent(menuButtonTextObj.transform, false);
+            }
+        }
+        UnityEngine.Object.DontDestroyOnLoad(buttonObj);
+        return buttonObj;
+    }
     
     public static GameObject CreateBepinexConfigOption<T>(T[] options, ConfigEntry<T> entry, string optionId, string label, string description, Func<T, string>? stringFunc = null)
     {
@@ -29,8 +125,10 @@ public static class Objects
         menuOptionComp.optionList = options.Cast<object>().ToList();
         menuOptionComp.transition = Selectable.Transition.None;
         menuOptionComp.configEntry = entry;
+        menuOptionComp.navigation = new Navigation { mode = Navigation.Mode.Explicit };
         if (stringFunc != null)
             menuOptionComp.stringFunc = o => stringFunc((T)o);
+        
         {
             var menuOptionLabelObj = new GameObject("Menu Option Label");
             

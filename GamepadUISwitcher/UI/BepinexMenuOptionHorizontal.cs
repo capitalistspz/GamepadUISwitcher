@@ -1,8 +1,6 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using BepInEx.Configuration;
-using TeamCherry.Localization;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -19,13 +17,13 @@ public class BepinexMenuOptionHorizontal : MenuSelectable, IMoveHandler, IEventS
 		Submit
 	}
 
-	public Text optionText = null!;
+	public Text optionText;
 	
-	public List<object> optionList = null!;
+	public List<object> optionList;
 
 	public Func<object, string>? stringFunc;
 
-	public ConfigEntryBase configEntry = null!; 
+	public ConfigEntryBase configEntry; 
 
 	public ApplyOnType applySettingOn;
 
@@ -37,6 +35,20 @@ public class BepinexMenuOptionHorizontal : MenuSelectable, IMoveHandler, IEventS
 
 	private int currentActiveIndex;
 
+	private Delegate del;
+
+	private bool justUpdatedEntry = false;
+
+	private void OnConfigEntryUpdate(object obj, System.EventArgs evArgs)
+	{
+		if (justUpdatedEntry)
+		{
+			justUpdatedEntry = false;
+			return;
+		}
+		RefreshCurrentIndex();
+	}
+
 	private new void Awake()
 	{
 		hasApplyButton = applyButton != null;
@@ -44,6 +56,13 @@ public class BepinexMenuOptionHorizontal : MenuSelectable, IMoveHandler, IEventS
 
 	private new void OnEnable()
 	{
+		// Event added via reflection because ConfigEntryBase doesn't have ConfigEntry.SettingChanged
+		if (configEntry != null)
+		{
+			var evInfo = configEntry.GetType().GetEvent("SettingChanged");
+			del = Delegate.CreateDelegate(typeof(EventHandler), this, nameof(OnConfigEntryUpdate));
+			evInfo.AddEventHandler(configEntry, del);
+		}
 		GameManager.instance.RefreshLanguageText += UpdateText;
 		RefreshMenuControls();
 		UpdateApplyButton();
@@ -52,6 +71,12 @@ public class BepinexMenuOptionHorizontal : MenuSelectable, IMoveHandler, IEventS
 	private new void OnDisable()
 	{
 		GameManager.instance.RefreshLanguageText -= UpdateText;
+		if (configEntry != null)
+		{
+			var evInfo = configEntry.GetType().GetEvent("SettingChanged");
+			evInfo.RemoveEventHandler(configEntry, del);
+		}
+		
 	}
 
 	public new void OnMove(AxisEventData move)
@@ -161,6 +186,7 @@ public class BepinexMenuOptionHorizontal : MenuSelectable, IMoveHandler, IEventS
 
 	protected void UpdateSetting()
 	{
+		justUpdatedEntry = true;
 		configEntry.BoxedValue = optionList[selectedOptionIndex];
 	}
 

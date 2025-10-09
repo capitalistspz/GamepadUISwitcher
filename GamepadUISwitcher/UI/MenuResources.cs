@@ -23,8 +23,9 @@ using UnityEngine;
         public static Sprite ScrollbarBackgroundSprite { get; private set; }
 
         // ReSharper restore CS1591
-#pragma warning restore 1591
-
+#pragma warning restore 15918
+        
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "CS8618:Non-nullable field must contain a non-null value when exiting constructor", Justification = "They will.")]
         static MenuResources()
         {
             ReloadResources();

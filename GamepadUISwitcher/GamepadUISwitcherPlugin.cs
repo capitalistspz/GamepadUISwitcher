@@ -11,7 +11,6 @@ namespace GamepadUISwitcher;
 public partial class GamepadUISwitcherPlugin : BaseUnityPlugin
 {
     internal new static ManualLogSource Logger;
-    internal static Harmony harmony;
     
     private const GamepadType Auto = (GamepadType)(-1);
 
@@ -26,7 +25,7 @@ public partial class GamepadUISwitcherPlugin : BaseUnityPlugin
     ];
     
     internal static ConfigEntry<GamepadType> gamepadSkinConfig;
-    internal static GamepadType SelectedGamepadType => (gamepadSkinConfig.Value == Auto || gamepadSkinConfig.Value == GamepadType.UNKNOWN) ? UIManager.instance.ih.activeGamepadType : gamepadSkinConfig.Value;
+    internal static GamepadType SelectedGamepadType => gamepadSkinConfig.Value is Auto or GamepadType.UNKNOWN ? UIManager.instance.ih.activeGamepadType : gamepadSkinConfig.Value;
 
     internal static string SkinOptToString(GamepadType type) => type switch
     {
@@ -55,7 +54,7 @@ public partial class GamepadUISwitcherPlugin : BaseUnityPlugin
             UIManager.instance.uiButtonSkins.RefreshButtonMappings();
         };
         
-        harmony = Harmony.CreateAndPatchAll(typeof(UIManagerPatch));
+        var harmony = Harmony.CreateAndPatchAll(typeof(UIManagerPatch));
         harmony.PatchAll(typeof(ButtonSkinsPatch));
         harmony.PatchAll(typeof(ControllerDetectPatch));
         Logger.LogInfo($"Plugin {Name} ({Id}) has loaded!");

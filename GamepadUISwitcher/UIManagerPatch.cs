@@ -24,8 +24,8 @@ public class UIManagerPatch
         
         // "Content" object is unnecessarily large, shrink it to size of its child
         var contentTransform = controllerMenuScreen.transform.Find("Content") as RectTransform;
-        var profilesTransform = contentTransform.Find("ControllerProfiles") as RectTransform;
-        contentTransform.sizeDelta = profilesTransform.sizeDelta;
+        var profilesTransform = contentTransform!.Find("ControllerProfiles") as RectTransform;
+        contentTransform.sizeDelta = profilesTransform!.sizeDelta;
         
         // Shrink spacing so that more elements can be added
         var controlsTransform = controllerMenuScreen.transform.Find("Controls");

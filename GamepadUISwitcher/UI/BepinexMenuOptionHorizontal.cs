@@ -19,17 +19,17 @@ public class BepinexMenuOptionHorizontal : MenuSelectable, IMoveHandler, IEventS
 		Submit
 	}
 
-	public Text optionText;
+	public Text optionText = null!;
 	
-	public List<object> optionList;
+	public List<object> optionList = null!;
 
 	public Func<object, string>? stringFunc;
 
-	public ConfigEntryBase configEntry; 
+	public ConfigEntryBase configEntry = null!; 
 
 	public ApplyOnType applySettingOn;
 
-	public CanvasGroup applyButton;
+	public CanvasGroup? applyButton;
 	
 	public int selectedOptionIndex;
 	

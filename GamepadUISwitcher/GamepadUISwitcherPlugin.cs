@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using BepInEx;
 using BepInEx.Configuration;
 using BepInEx.Logging;
@@ -11,36 +12,39 @@ namespace GamepadUISwitcher;
 public partial class GamepadUISwitcherPlugin : BaseUnityPlugin
 {
     internal new static ManualLogSource Logger;
-    
-    private const GamepadType Auto = (GamepadType)(-1);
 
-    internal static readonly GamepadType[] GamepadSkinOptions =
-    [
-        Auto, 
-        GamepadType.XBOX_360, GamepadType.XBOX_ONE, GamepadType.XBOX_SERIES_X,
-        GamepadType.PS4, GamepadType.PS5,
-        GamepadType.SWITCH_JOYCON_DUAL, GamepadType.SWITCH2_JOYCON_DUAL, 
-        GamepadType.SWITCH_PRO_CONTROLLER, GamepadType.SWITCH2_PRO_CONTROLLER, 
-        GamepadType.STEAM_DECK
-    ];
+    internal static readonly GamepadButtonSkinOpt[] GamepadSkinOptions =
+        Enum.GetValues(typeof(GamepadButtonSkinOpt)).Cast<GamepadButtonSkinOpt>().ToArray();
     
-    internal static ConfigEntry<GamepadType> gamepadSkinConfig;
-    internal static GamepadType SelectedGamepadType => gamepadSkinConfig.Value is Auto or GamepadType.UNKNOWN or GamepadType.PS_VITA or GamepadType.WII_U_GAMEPAD or GamepadType.WII_U_PRO_CONTROLLER
-        ? UIManager.instance.ih.activeGamepadType : gamepadSkinConfig.Value;
-
-    internal static string SkinOptToString(GamepadType type) => type switch
+    internal static ConfigEntry<GamepadButtonSkinOpt> gamepadSkinConfig;
+    
+    internal static GamepadType SelectedGamepadType => gamepadSkinConfig.Value switch
     {
-        Auto => "Auto",
-        GamepadType.XBOX_360 => "Xbox 360",
-        GamepadType.XBOX_ONE => "Xbox One",
-        GamepadType.XBOX_SERIES_X => "Xbox Series X",
-        GamepadType.PS4 => "DualShock 4",
-        GamepadType.PS5 => "DualSense",
-        GamepadType.SWITCH_JOYCON_DUAL => "Switch Joycons",
-        GamepadType.SWITCH2_JOYCON_DUAL => "Switch 2 Joycons",
-        GamepadType.SWITCH_PRO_CONTROLLER => "Switch Pro",
-        GamepadType.SWITCH2_PRO_CONTROLLER => "Switch 2 Pro",
-        GamepadType.STEAM_DECK => "Steam Deck",
+        GamepadButtonSkinOpt.Xbox360 => GamepadType.XBOX_360,
+        GamepadButtonSkinOpt.XboxOne => GamepadType.XBOX_ONE,
+        GamepadButtonSkinOpt.XboxSeriesX => GamepadType.XBOX_SERIES_X,
+        GamepadButtonSkinOpt.DualShock4 => GamepadType.PS4,
+        GamepadButtonSkinOpt.DualSense => GamepadType.PS5,
+        GamepadButtonSkinOpt.SwitchJoycons => GamepadType.SWITCH_JOYCON_DUAL,
+        GamepadButtonSkinOpt.Switch2Joycons => GamepadType.SWITCH2_JOYCON_DUAL,
+        GamepadButtonSkinOpt.SwitchPro => GamepadType.SWITCH_PRO_CONTROLLER,
+        GamepadButtonSkinOpt.Switch2Pro => GamepadType.SWITCH2_PRO_CONTROLLER,
+        GamepadButtonSkinOpt.SteamDeck => GamepadType.STEAM_DECK,
+        _ => UIManager.instance.ih.activeGamepadType
+    };
+    internal static string SkinOptToString(GamepadButtonSkinOpt type) => type switch
+    {
+        GamepadButtonSkinOpt.Auto => "Auto",
+        GamepadButtonSkinOpt.Xbox360 => "Xbox 360",
+        GamepadButtonSkinOpt.XboxOne => "Xbox One",
+        GamepadButtonSkinOpt.XboxSeriesX => "Xbox Series X",
+        GamepadButtonSkinOpt.DualShock4 => "DualShock 4",
+        GamepadButtonSkinOpt.DualSense => "DualSense",
+        GamepadButtonSkinOpt.SwitchJoycons => "Switch Joycons",
+        GamepadButtonSkinOpt.Switch2Joycons => "Switch 2 Joycons",
+        GamepadButtonSkinOpt.SwitchPro => "Switch Pro",
+        GamepadButtonSkinOpt.Switch2Pro => "Switch 2 Pro",
+        GamepadButtonSkinOpt.SteamDeck => "Steam Deck",
         _ => "Unknown"
     };
     
@@ -48,7 +52,7 @@ public partial class GamepadUISwitcherPlugin : BaseUnityPlugin
     {
         Logger = base.Logger;
         
-        gamepadSkinConfig = Config.Bind("UI", "Gamepad Skin", Auto);
+        gamepadSkinConfig = Config.Bind("UI", "Gamepad Skin", GamepadButtonSkinOpt.Auto);
         gamepadSkinConfig.SettingChanged += (_, _) =>
         {
             UIManager.instance.controllerDetect.ShowController(SelectedGamepadType);

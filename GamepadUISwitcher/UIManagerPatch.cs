@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 namespace GamepadUISwitcher;
 
-// Here, 
+// Here we add the objects into the existing UI
 public class UIManagerPatch
 {
     [HarmonyPatch(typeof(UIManager), nameof(UIManager.Awake))]
@@ -22,35 +22,56 @@ public class UIManagerPatch
         layoutGroupComp.childScaleHeight = true;
         layoutGroupComp.childControlHeight = false;
         
-        // "Content" object is unnecessarily large, shrink it to size of child
+        // "Content" object is unnecessarily large, shrink it to size of its child
         var contentTransform = controllerMenuScreen.transform.Find("Content") as RectTransform;
         var profilesTransform = contentTransform.Find("ControllerProfiles") as RectTransform;
         contentTransform.sizeDelta = profilesTransform.sizeDelta;
         
+        // Shrink spacing so that more elements can be added
         var controlsTransform = controllerMenuScreen.transform.Find("Controls");
+        var controlsLayoutGroupComp = controlsTransform.GetComponent<VerticalLayoutGroup>();
+        controlsLayoutGroupComp.spacing *= 0.75f;
+        controlsLayoutGroupComp.childAlignment = TextAnchor.MiddleCenter;
+        
         var rumbleSettingTransform = controlsTransform.Find("RumbleSetting");
 
-        var uiSkinSetting = new GameObject("GamepadSkinSetting");
-        uiSkinSetting.AddComponentIfNotPresent<RectTransform>();
-        uiSkinSetting.transform.SetParent(controlsTransform, false);
-        uiSkinSetting.transform.SetSiblingIndex(rumbleSettingTransform.GetSiblingIndex() + 1);
-
-        var optionObj = UI.Objects.CreateBepinexConfigOption(
+        var uiSkinSettingObj = new GameObject("GamepadSkinSetting");
+        uiSkinSettingObj.AddComponentIfNotPresent<RectTransform>();
+        uiSkinSettingObj.transform.SetParent(controlsTransform, false);
+        uiSkinSettingObj.transform.SetSiblingIndex(rumbleSettingTransform.GetSiblingIndex() + 1);
+        
+        var skinOptionObj = UI.Objects.CreateBepinexConfigOption(
             GamepadUISwitcherPlugin.GamepadSkinOptions, GamepadUISwitcherPlugin.gamepadSkinConfig,
             "GamepadSkinOptionPopup", "Gamepad Skin", "Choose what the gamepad UI should look like", GamepadUISwitcherPlugin.SkinOptToString);
-        optionObj.transform.SetParent(uiSkinSetting.transform, false);
+        skinOptionObj.transform.SetParent(uiSkinSettingObj.transform, false);
         
-        var newEntry = new MenuButtonList.Entry
+        var skinOptionEntry = new MenuButtonList.Entry
         {
-            selectable = optionObj.GetComponent<MenuSelectable>(),
+            selectable = skinOptionObj.GetComponent<MenuSelectable>(),
             alsoAffectParent = true,
             forceEnable = false,
             condition = null
         };
-        newEntry.selectable.navigation = new Navigation { mode = Navigation.Mode.Explicit };
         
         var menuButtonListComp = controllerMenuScreen.GetComponent<MenuButtonList>();
         var rumblePopupOpt = menuButtonListComp.entries.First(entry => entry.selectable.name == "RumblePopupOption");
-        UI.Utils.InsertAfter(ref menuButtonListComp.entries, rumblePopupOpt, newEntry);
+        UI.Utils.InsertAfter(ref menuButtonListComp.entries, rumblePopupOpt, skinOptionEntry);
+
+        var swapButtonOptionObj = new GameObject("GamepadButtonSwapOption");
+        swapButtonOptionObj.AddComponentIfNotPresent<RectTransform>();
+        swapButtonOptionObj.transform.SetParent(controlsTransform, false);
+        swapButtonOptionObj.transform.SetSiblingIndex(uiSkinSettingObj.transform.GetSiblingIndex() + 1);
+        
+        var swapButtonObj = UI.Objects.CreateMenuButton("GamepadButtonSwapButton", "Swap Face Button Icons", MenuButton.MenuButtonType.Activate, _ => 
+            GamepadUISwitcherPlugin.SwapXY_AB());
+        swapButtonObj.transform.SetParent(swapButtonOptionObj.transform, false);
+        
+        var swapButtonEntry = new MenuButtonList.Entry
+        {
+            selectable = swapButtonObj.GetComponent<MenuSelectable>(),
+            alsoAffectParent = true,
+            forceEnable = false,
+        };
+        UI.Utils.InsertAfter(ref menuButtonListComp.entries, skinOptionEntry, swapButtonEntry);
     }
 }

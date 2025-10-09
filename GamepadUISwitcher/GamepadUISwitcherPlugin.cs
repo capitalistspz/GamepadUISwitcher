@@ -61,4 +61,31 @@ public partial class GamepadUISwitcherPlugin : BaseUnityPlugin
         Logger.LogInfo($"Plugin {Name} ({Id}) has loaded!");
     }
     
+    public static void SwapXY_AB()
+    {
+        string[] buttonsObjNames =
+        [
+            "Xbox360Buttons", "XboxOneButtons", "PS4Buttons", "SwitchJoyconButtons", "Switch2JoyconButtons",
+            "SwitchProControllerButtons", "PS5Buttons", "XboxSeriesXButtons", "SteamDeckButtons"
+        ];
+        foreach (var name in buttonsObjNames)
+        {
+            var transform = UIManager.instance.gamepadMenuScreen.transform.Find($"Content/ControllerProfiles/{name}");
+            var positions = transform.GetComponent<ControllerButtonPositions>();
+            (positions.action1.controllerButton, positions.action2.controllerButton) = (positions.action2.controllerButton, positions.action1.controllerButton);
+            (positions.action3.controllerButton, positions.action4.controllerButton) = (positions.action4.controllerButton, positions.action3.controllerButton);
+        }
+
+        var skins = UIManager.instance.uiButtonSkins;
+        (skins.a, skins.b) = (skins.b, skins.a);
+        (skins.x, skins.y) = (skins.y, skins.x);
+        (skins.ps4x, skins.ps4circle) = (skins.ps4circle, skins.ps4x);
+        (skins.ps4triangle, skins.ps4square) = (skins.ps4triangle, skins.ps4square);
+        (skins.switchHidA, skins.switchHidB) = (skins.switchHidB, skins.switchHidA);
+        (skins.switchHidX, skins.switchHidY) = (skins.switchHidY, skins.switchHidX);
+        (skins.ps5.cross, skins.ps5.circle) = (skins.ps5.circle, skins.ps5.cross);
+        (skins.ps5.triangle, skins.ps5.square) = (skins.ps5.square, skins.ps5.triangle);
+        
+        UIManager.instance.controllerDetect.ShowController(SelectedGamepadType);
+    }
 }

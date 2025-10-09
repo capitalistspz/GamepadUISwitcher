@@ -7,7 +7,7 @@ using HarmonyLib;
 
 namespace GamepadUISwitcher;
 
-[BepInAutoPlugin(id: "io.github.capitalistspz.gamepaduiswitcher")]
+[BepInAutoPlugin(id: "capitalistspz.gamepaduiswitcher-silksong")]
 public partial class GamepadUISwitcherPlugin : BaseUnityPlugin
 {
     internal new static ManualLogSource Logger;
@@ -25,7 +25,8 @@ public partial class GamepadUISwitcherPlugin : BaseUnityPlugin
     ];
     
     internal static ConfigEntry<GamepadType> gamepadSkinConfig;
-    internal static GamepadType SelectedGamepadType => gamepadSkinConfig.Value is Auto or GamepadType.UNKNOWN ? UIManager.instance.ih.activeGamepadType : gamepadSkinConfig.Value;
+    internal static GamepadType SelectedGamepadType => gamepadSkinConfig.Value is Auto or GamepadType.UNKNOWN or GamepadType.PS_VITA or GamepadType.WII_U_GAMEPAD or GamepadType.WII_U_PRO_CONTROLLER
+        ? UIManager.instance.ih.activeGamepadType : gamepadSkinConfig.Value;
 
     internal static string SkinOptToString(GamepadType type) => type switch
     {
@@ -58,6 +59,7 @@ public partial class GamepadUISwitcherPlugin : BaseUnityPlugin
         harmony.PatchAll(typeof(ButtonSkinsPatch));
         harmony.PatchAll(typeof(ControllerDetectPatch));
         Logger.LogInfo($"Plugin {Name} ({Id}) has loaded!");
+        
     }
     
     public static void SwapXY_AB()

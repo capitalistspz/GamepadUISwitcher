@@ -80,7 +80,7 @@ public partial class GamepadUISwitcherPlugin : BaseUnityPlugin
         (skins.a, skins.b) = (skins.b, skins.a);
         (skins.x, skins.y) = (skins.y, skins.x);
         (skins.ps4x, skins.ps4circle) = (skins.ps4circle, skins.ps4x);
-        (skins.ps4triangle, skins.ps4square) = (skins.ps4triangle, skins.ps4square);
+        (skins.ps4triangle, skins.ps4square) = (skins.ps4square, skins.ps4triangle);
         (skins.switchHidA, skins.switchHidB) = (skins.switchHidB, skins.switchHidA);
         (skins.switchHidX, skins.switchHidY) = (skins.switchHidY, skins.switchHidX);
         (skins.ps5.cross, skins.ps5.circle) = (skins.ps5.circle, skins.ps5.cross);

@@ -32,21 +32,6 @@ public partial class GamepadUISwitcherPlugin : BaseUnityPlugin
         GamepadButtonSkinOpt.SteamDeck => GamepadType.STEAM_DECK,
         _ => UIManager.instance.ih.activeGamepadType
     };
-    internal static string SkinOptToString(GamepadButtonSkinOpt type) => type switch
-    {
-        GamepadButtonSkinOpt.Auto => "Auto",
-        GamepadButtonSkinOpt.Xbox360 => "Xbox 360",
-        GamepadButtonSkinOpt.XboxOne => "Xbox One",
-        GamepadButtonSkinOpt.XboxSeriesX => "Xbox Series X",
-        GamepadButtonSkinOpt.DualShock4 => "DualShock 4",
-        GamepadButtonSkinOpt.DualSense => "DualSense",
-        GamepadButtonSkinOpt.SwitchJoycons => "Switch Joycons",
-        GamepadButtonSkinOpt.Switch2Joycons => "Switch 2 Joycons",
-        GamepadButtonSkinOpt.SwitchPro => "Switch Pro",
-        GamepadButtonSkinOpt.Switch2Pro => "Switch 2 Pro",
-        GamepadButtonSkinOpt.SteamDeck => "Steam Deck",
-        _ => "Unknown"
-    };
     
     private void Awake()
     {

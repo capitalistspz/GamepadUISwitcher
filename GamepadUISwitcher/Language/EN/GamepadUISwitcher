@@ -1,0 +1,15 @@
+<entries>
+    <entry name="Auto">Auto</entry>
+    <entry name="Xbox360">Xbox 360</entry>
+    <entry name="XboxOne">Xbox One</entry>
+    <entry name="XboxSeriesX">Xbox Series X</entry>
+    <entry name="DualShock4">DualShock 4</entry>
+    <entry name="DualSense">DualSense</entry>
+    <entry name="SwitchJoycons">Switch Joy-Cons</entry>
+    <entry name="Switch2Joycons">Switch Joy-Cons</entry>
+    <entry name="SwitchPro">Switch Pro</entry>
+    <entry name="Switch2Pro">Switch 2 Pro</entry>
+    <entry name="SteamDeck">Steam Deck</entry>
+    <entry name="SKIN_OPT_LABEL">Gamepad Skin</entry>
+    <entry name="SKIN_OPT_DESCRIPTION">Select how the gamepad UI should look</entry>
+</entries>

@@ -39,7 +39,17 @@
             <Binaries Include="$(TargetDir)/$(TargetName).pdb"/>
         </ItemGroup>
 
-        <Copy SourceFiles="@(Binaries)" DestinationFolder="$(SilksongFolder)/BepInEx/plugins/$(TargetName)"/>
+        <ItemGroup>
+            <LanguageFiles Include="Language/**" />
+        </ItemGroup>
+
+        <PropertyGroup>
+            <PluginFolder>$(SilksongFolder)/BepInEx/plugins/$(TargetName)</PluginFolder>
+        </PropertyGroup>
+
+        <Copy SourceFiles="@(Binaries)" DestinationFolder="$(PluginFolder)"/>
+        <Copy SourceFiles="@(Binaries)" DestinationFolder="$(PluginFolder)"/>
+        <Copy SourceFiles="@(LanguageFiles)" DestinationFolder="$(PluginFolder)/Language/%(RecursiveDir)"/>
 
         <PropertyGroup>
             <ExportFolder>bin/Publish</ExportFolder>
@@ -48,6 +58,7 @@
         <RemoveDir Directories="$(IntermediateOutputPath)/archive"/>
         <MakeDir Directories="$(ExportFolder)"/>
         <Copy SourceFiles="@(Binaries)" DestinationFolder="$(IntermediateOutputPath)/archive"/>
+        <Copy SourceFiles="@(LanguageFiles)" DestinationFolder="$(IntermediateOutputPath)/archive/Language"/>
         <ZipDirectory SourceDirectory="$(IntermediateOutputPath)/archive" DestinationFile="$(ExportFolder)/$(TargetName).zip" Overwrite="True"/>
     </Target>
 </Project>

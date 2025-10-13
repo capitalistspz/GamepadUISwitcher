@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using BepInEx.Configuration;
+using TeamCherry.Localization;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -113,9 +114,11 @@ public static class Objects
         return buttonObj;
     }
     
-    public static GameObject CreateBepinexConfigOption<T>(T[] options, ConfigEntry<T> entry, string optionId, string label, string description, Func<T, string>? stringFunc = null)
+    public static GameObject CreateBepinexConfigOptionTranslated<T>(string objectId, string tlSheet, string labelKey, string descriptionKey,
+         T[] options, ConfigEntry<T> entry)
     {
-        var optionObj = new GameObject(optionId);
+        var optionObj = new GameObject(objectId);
+        optionObj.SetActive(false);
         
         var rect = optionObj.AddComponent<RectTransform>();
         rect.sizeDelta = new Vector2(1100f, 60f);
@@ -126,11 +129,13 @@ public static class Objects
         menuOptionComp.transition = Selectable.Transition.None;
         menuOptionComp.configEntry = entry;
         menuOptionComp.navigation = new Navigation { mode = Navigation.Mode.Explicit };
-        if (stringFunc != null)
-            menuOptionComp.stringFunc = o => stringFunc((T)o);
+        menuOptionComp.sheetTitle = tlSheet;
         
         {
             var menuOptionLabelObj = new GameObject("Menu Option Label");
+            // Has to be disabled to avoid triggering AutoLocalizeTextUI.OnEnable, and possibly other components,
+            // when component is added 
+            menuOptionLabelObj.SetActive(false);
             
             var transformComp = menuOptionLabelObj.AddComponent<RectTransform>();
             transformComp.anchoredPosition = new Vector2(450f, 0f);
@@ -143,9 +148,12 @@ public static class Objects
             textComp.font = MenuResources.TrajanProBold;
             textComp.fontSize = FontSize.OptionLabel;
             textComp.lineSpacing = -0.33f;
-            textComp.text = label;
             textComp.horizontalOverflow = HorizontalWrapMode.Overflow;
-
+            
+            var autoLocalizeComp = menuOptionLabelObj.AddComponent<AutoLocalizeTextUI>();
+            autoLocalizeComp.textField = textComp;
+            autoLocalizeComp.text = new LocalisedString(tlSheet, labelKey);
+            
             var fontScaleComp = menuOptionLabelObj.AddComponent<ChangeTextFontScaleOnHandHeld>();
             fontScaleComp.handHeldSize = FontSize.OptionLabel;
             fontScaleComp.normalSize = FontSize.OptionLabel;
@@ -153,10 +161,11 @@ public static class Objects
             menuOptionLabelObj.AddComponent<FixVerticalAlign>();
             
             menuOptionLabelObj.transform.SetParent(optionObj.transform, false);
+            menuOptionLabelObj.SetActive(true);
         }
         {
             var menuOptionTextObj = new GameObject("Menu Option Text");
-            
+            menuOptionTextObj.SetActive(false);
             var transformComp = menuOptionTextObj.AddComponent<RectTransform>();
             transformComp.anchoredPosition = new Vector2(-100f, 0f);
             transformComp.sizeDelta = new Vector2(200f, 1f);
@@ -179,6 +188,7 @@ public static class Objects
             menuOptionTextObj.transform.SetParent(optionObj.transform, false);
 
             menuOptionComp.optionText = textComp;
+            menuOptionTextObj.SetActive(true);
         }
         {
             var cursorRightObj = new GameObject("CursorRight");
@@ -221,6 +231,7 @@ public static class Objects
         }
         {
             var descriptionObj = new GameObject("Description");
+            descriptionObj.SetActive(false);
             
             var transformComp = descriptionObj.AddComponent<RectTransform>();
             transformComp.anchoredPosition = new Vector2(2f, -55.8f);
@@ -234,8 +245,11 @@ public static class Objects
             textComp.font = MenuResources.Perpetua;
             textComp.fontSize = FontSize.OptionDescription;
             textComp.lineSpacing = 1;
-            textComp.text = description;
             textComp.horizontalOverflow = HorizontalWrapMode.Overflow;
+            
+            var autoLocalizeComp = descriptionObj.AddComponent<AutoLocalizeTextUI>();
+            autoLocalizeComp.textField = textComp;
+            autoLocalizeComp.text = new LocalisedString(tlSheet, descriptionKey);
 
             var animator = descriptionObj.AddComponent<Animator>();
             animator.runtimeAnimatorController = MenuResources.TextHideShowAnimator;
@@ -247,8 +261,10 @@ public static class Objects
             
             descriptionObj.transform.SetParent(optionObj.transform, false);
             menuOptionComp.descriptionText = animator;
+            descriptionObj.SetActive(true);
         }
         UnityEngine.Object.DontDestroyOnLoad(optionObj);
+        optionObj.SetActive(true);
         return optionObj;
     }
 }

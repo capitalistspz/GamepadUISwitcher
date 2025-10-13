@@ -40,9 +40,10 @@ public class UIManagerPatch
         uiSkinSettingObj.transform.SetParent(controlsTransform, false);
         uiSkinSettingObj.transform.SetSiblingIndex(rumbleSettingTransform.GetSiblingIndex() + 1);
         
-        var skinOptionObj = UI.Objects.CreateBepinexConfigOption(
-            GamepadUISwitcherPlugin.GamepadSkinOptions, GamepadUISwitcherPlugin.gamepadSkinConfig,
-            "GamepadSkinOptionPopup", "Gamepad Skin", "Choose what the gamepad UI should look like", GamepadUISwitcherPlugin.SkinOptToString);
+        var skinOptionObj = UI.Objects.CreateBepinexConfigOptionTranslated("GamepadSkinOption",
+            "GamepadUISwitcher", "SKIN_OPT_LABEL", "SKIN_OPT_DESCRIPTION",
+            GamepadUISwitcherPlugin.GamepadSkinOptions, GamepadUISwitcherPlugin.gamepadSkinConfig);
+        
         skinOptionObj.transform.SetParent(uiSkinSettingObj.transform, false);
         
         var skinOptionEntry = new MenuButtonList.Entry

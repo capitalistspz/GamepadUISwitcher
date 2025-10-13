@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using BepInEx.Configuration;
+using TeamCherry.Localization;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -20,8 +21,8 @@ public class BepinexMenuOptionHorizontal : MenuSelectable, IMoveHandler, IEventS
 	public Text optionText;
 	
 	public List<object> optionList;
-
-	public Func<object, string>? stringFunc;
+	
+	public string sheetTitle;
 
 	public ConfigEntryBase configEntry; 
 
@@ -151,7 +152,8 @@ public class BepinexMenuOptionHorizontal : MenuSelectable, IMoveHandler, IEventS
 
 	private string OptionToString(int index)
 	{
-		return stringFunc != null ? stringFunc(optionList[index]) : optionList[index].ToString();
+		var opt = optionList[index];
+		return Language.Get(opt.ToString(), sheetTitle);
 	}
 
 	public string GetSelectedOptionText()

@@ -55,7 +55,8 @@ public partial class GamepadUISwitcherPlugin : BaseUnityPlugin
         gamepadSkinConfig = Config.Bind("UI", "Gamepad Skin", GamepadButtonSkinOpt.Auto);
         gamepadSkinConfig.SettingChanged += (_, _) =>
         {
-            UIManager.instance.controllerDetect.ShowController(SelectedGamepadType);
+            var temp = GamepadType.NONE;
+            UIManager.instance.controllerDetect.ShowController(temp);
             UIManager.instance.uiButtonSkins.RefreshButtonMappings();
         };
         
@@ -91,6 +92,7 @@ public partial class GamepadUISwitcherPlugin : BaseUnityPlugin
         (skins.ps5.cross, skins.ps5.circle) = (skins.ps5.circle, skins.ps5.cross);
         (skins.ps5.triangle, skins.ps5.square) = (skins.ps5.square, skins.ps5.triangle);
         
-        UIManager.instance.controllerDetect.ShowController(SelectedGamepadType);
+        var temp = GamepadType.NONE;
+        UIManager.instance.controllerDetect.ShowController(temp);
     }
 }

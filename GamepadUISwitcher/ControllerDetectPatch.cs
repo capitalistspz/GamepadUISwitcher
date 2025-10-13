@@ -9,6 +9,7 @@ public class ControllerDetectPatch
     [HarmonyPrefix]
     public static void ShowAltController(ref GamepadType gamepadType)
     {
-        gamepadType = GamepadUISwitcherPlugin.SelectedGamepadType;
+        if (UIManager.instance.ih.activeGamepadType != GamepadType.NONE)
+            gamepadType = GamepadUISwitcherPlugin.SelectedGamepadType;
     }
 }

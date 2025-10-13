@@ -17,7 +17,6 @@ public partial class GamepadUISwitcherPlugin : BaseUnityPlugin
     
     internal static ConfigEntry<GamepadButtonSkinOpt> gamepadSkinConfig;
     internal static ConfigEntry<GamepadButtonSwapOption> gamepadButtonSwapConfig;
-    private static FaceButtonSprites sprites;
     
     internal static GamepadType SelectedGamepadType => gamepadSkinConfig.Value switch
     {
@@ -47,15 +46,18 @@ public partial class GamepadUISwitcherPlugin : BaseUnityPlugin
         };
 
         gamepadButtonSwapConfig = Config.Bind("UI", "Button Swap", GamepadButtonSwapOption.None);
-        gamepadButtonSwapConfig.SettingChanged += (_, _) => SwapButtons();
+        gamepadButtonSwapConfig.SettingChanged += (_, _) =>
+        {;
+            SwapButtons();
+            UIManager.instance.controllerDetect.ShowController(GamepadType.NONE);
+        };
         
         var harmony = Harmony.CreateAndPatchAll(typeof(UIManagerPatch));
         harmony.PatchAll(typeof(ButtonSkinsPatch));
         harmony.PatchAll(typeof(ControllerDetectPatch));
         Logger.LogInfo($"Plugin {Name} ({Id}) has loaded!");
-        sprites = new FaceButtonSprites();
     }
-    
+
     public static void SwapButtons()
     {
         string[] buttonsObjNames =
@@ -68,27 +70,27 @@ public partial class GamepadUISwitcherPlugin : BaseUnityPlugin
 
         var positionsComponents = buttonsObjNames
             .Select(objName => UIManager.instance.gamepadMenuScreen.transform
-                .Find($"Content/ControllerProfiles/{objName}").GetComponent<ControllerButtonPositions>()).ToArray();
+                .Find($"Content/ControllerProfiles/{objName}").GetComponent<ControllerButtonPositions>());
        
         var opt = gamepadButtonSwapConfig.Value;
         switch (opt)
         {
             case GamepadButtonSwapOption.None:
             {
-                skins.a = sprites.xbox.a;
-                skins.b = sprites.xbox.b;
-                skins.x = sprites.xbox.x;
-                skins.y = sprites.xbox.y;
+                skins.a = FaceButtonSprites.xbox.a;
+                skins.b = FaceButtonSprites.xbox.b;
+                skins.x = FaceButtonSprites.xbox.x;
+                skins.y = FaceButtonSprites.xbox.y;
 
-                skins.ps4x = sprites.playstation.cross;
-                skins.ps4circle = sprites.playstation.circle;
-                skins.ps4square = sprites.playstation.square;
-                skins.ps4triangle = sprites.playstation.triangle;
+                skins.ps4x = FaceButtonSprites.playstation.cross;
+                skins.ps4circle = FaceButtonSprites.playstation.circle;
+                skins.ps4square = FaceButtonSprites.playstation.square;
+                skins.ps4triangle = FaceButtonSprites.playstation.triangle;
 
-                skins.switchHidA = sprites.nintendo.a;
-                skins.switchHidB = sprites.nintendo.b;
-                skins.switchHidX = sprites.nintendo.x;
-                skins.switchHidY = sprites.nintendo.y;
+                skins.switchHidA = FaceButtonSprites.nintendo.a;
+                skins.switchHidB = FaceButtonSprites.nintendo.b;
+                skins.switchHidX = FaceButtonSprites.nintendo.x;
+                skins.switchHidY = FaceButtonSprites.nintendo.y;
                 foreach (var positions in positionsComponents)
                 {
                     positions.action1.controllerButton = InputControlType.Action1;
@@ -101,20 +103,20 @@ public partial class GamepadUISwitcherPlugin : BaseUnityPlugin
             }
             case GamepadButtonSwapOption.AB_XY:
             {
-                skins.a = sprites.xbox.b;
-                skins.b = sprites.xbox.a;
-                skins.x = sprites.xbox.y;
-                skins.y = sprites.xbox.x;
+                skins.a = FaceButtonSprites.xbox.b;
+                skins.b = FaceButtonSprites.xbox.a;
+                skins.x = FaceButtonSprites.xbox.y;
+                skins.y = FaceButtonSprites.xbox.x;
 
-                skins.ps4x = sprites.playstation.circle;
-                skins.ps4circle = sprites.playstation.cross;
-                skins.ps4square = sprites.playstation.triangle;
-                skins.ps4triangle = sprites.playstation.square;
+                skins.ps4x = FaceButtonSprites.playstation.circle;
+                skins.ps4circle = FaceButtonSprites.playstation.cross;
+                skins.ps4square = FaceButtonSprites.playstation.triangle;
+                skins.ps4triangle = FaceButtonSprites.playstation.square;
                 
-                skins.switchHidA = sprites.nintendo.b;
-                skins.switchHidB = sprites.nintendo.a;
-                skins.switchHidX = sprites.nintendo.y;
-                skins.switchHidY = sprites.nintendo.x;
+                skins.switchHidA = FaceButtonSprites.nintendo.b;
+                skins.switchHidB = FaceButtonSprites.nintendo.a;
+                skins.switchHidX = FaceButtonSprites.nintendo.y;
+                skins.switchHidY = FaceButtonSprites.nintendo.x;
 
                 foreach (var positions in positionsComponents)
                 {
@@ -128,20 +130,20 @@ public partial class GamepadUISwitcherPlugin : BaseUnityPlugin
             }
             case GamepadButtonSwapOption.AB:
             {
-                skins.a = sprites.xbox.b;
-                skins.b = sprites.xbox.a;
-                skins.x = sprites.xbox.x;
-                skins.y = sprites.xbox.y;
+                skins.a = FaceButtonSprites.xbox.b;
+                skins.b = FaceButtonSprites.xbox.a;
+                skins.x = FaceButtonSprites.xbox.x;
+                skins.y = FaceButtonSprites.xbox.y;
 
-                skins.ps4x = sprites.playstation.circle;
-                skins.ps4circle = sprites.playstation.cross;
-                skins.ps4square = sprites.playstation.square;
-                skins.ps4triangle = sprites.playstation.triangle;
+                skins.ps4x = FaceButtonSprites.playstation.circle;
+                skins.ps4circle = FaceButtonSprites.playstation.cross;
+                skins.ps4square = FaceButtonSprites.playstation.square;
+                skins.ps4triangle = FaceButtonSprites.playstation.triangle;
 
-                skins.switchHidA = sprites.nintendo.b;
-                skins.switchHidB = sprites.nintendo.a;
-                skins.switchHidX = sprites.nintendo.x;
-                skins.switchHidY = sprites.nintendo.y;
+                skins.switchHidA = FaceButtonSprites.nintendo.b;
+                skins.switchHidB = FaceButtonSprites.nintendo.a;
+                skins.switchHidX = FaceButtonSprites.nintendo.x;
+                skins.switchHidY = FaceButtonSprites.nintendo.y;
 
                 foreach (var positions in positionsComponents)
                 {
@@ -155,20 +157,20 @@ public partial class GamepadUISwitcherPlugin : BaseUnityPlugin
             }
             case GamepadButtonSwapOption.XY:
             {
-                skins.a = sprites.xbox.a;
-                skins.b = sprites.xbox.b;
-                skins.x = sprites.xbox.y;
-                skins.y = sprites.xbox.x;
+                skins.a = FaceButtonSprites.xbox.a;
+                skins.b = FaceButtonSprites.xbox.b;
+                skins.x = FaceButtonSprites.xbox.y;
+                skins.y = FaceButtonSprites.xbox.x;
 
-                skins.ps4x = sprites.playstation.cross;
-                skins.ps4circle = sprites.playstation.circle;
-                skins.ps4square = sprites.playstation.triangle;
-                skins.ps4triangle = sprites.playstation.square;
+                skins.ps4x = FaceButtonSprites.playstation.cross;
+                skins.ps4circle = FaceButtonSprites.playstation.circle;
+                skins.ps4square = FaceButtonSprites.playstation.triangle;
+                skins.ps4triangle = FaceButtonSprites.playstation.square;
 
-                skins.switchHidA = sprites.nintendo.a;
-                skins.switchHidB = sprites.nintendo.b;
-                skins.switchHidX = sprites.nintendo.y;
-                skins.switchHidY = sprites.nintendo.x;
+                skins.switchHidA = FaceButtonSprites.nintendo.a;
+                skins.switchHidB = FaceButtonSprites.nintendo.b;
+                skins.switchHidX = FaceButtonSprites.nintendo.y;
+                skins.switchHidY = FaceButtonSprites.nintendo.x;
 
                 foreach (var positions in positionsComponents)
                 {
@@ -182,20 +184,20 @@ public partial class GamepadUISwitcherPlugin : BaseUnityPlugin
             }
             case GamepadButtonSwapOption.AX_BY:
             {
-                skins.a = sprites.xbox.x;
-                skins.b = sprites.xbox.y;
-                skins.x = sprites.xbox.a;
-                skins.y = sprites.xbox.b;
+                skins.a = FaceButtonSprites.xbox.x;
+                skins.b = FaceButtonSprites.xbox.y;
+                skins.x = FaceButtonSprites.xbox.a;
+                skins.y = FaceButtonSprites.xbox.b;
 
-                skins.ps4x = sprites.playstation.square;
-                skins.ps4circle = sprites.playstation.triangle;
-                skins.ps4square = sprites.playstation.cross;
-                skins.ps4triangle = sprites.playstation.circle;
+                skins.ps4x = FaceButtonSprites.playstation.square;
+                skins.ps4circle = FaceButtonSprites.playstation.triangle;
+                skins.ps4square = FaceButtonSprites.playstation.cross;
+                skins.ps4triangle = FaceButtonSprites.playstation.circle;
 
-                skins.switchHidA = sprites.nintendo.x;
-                skins.switchHidB = sprites.nintendo.y;
-                skins.switchHidX = sprites.nintendo.a;
-                skins.switchHidY = sprites.nintendo.b;
+                skins.switchHidA = FaceButtonSprites.nintendo.x;
+                skins.switchHidB = FaceButtonSprites.nintendo.y;
+                skins.switchHidX = FaceButtonSprites.nintendo.a;
+                skins.switchHidY = FaceButtonSprites.nintendo.b;
 
                 foreach (var positions in positionsComponents)
                 {
@@ -209,20 +211,20 @@ public partial class GamepadUISwitcherPlugin : BaseUnityPlugin
             }
             case GamepadButtonSwapOption.AX:
             {
-                skins.a = sprites.xbox.x;
-                skins.b = sprites.xbox.b;
-                skins.x = sprites.xbox.x;
-                skins.y = sprites.xbox.y;
+                skins.a = FaceButtonSprites.xbox.x;
+                skins.b = FaceButtonSprites.xbox.b;
+                skins.x = FaceButtonSprites.xbox.x;
+                skins.y = FaceButtonSprites.xbox.y;
 
-                skins.ps4x = sprites.playstation.square;
-                skins.ps4circle = sprites.playstation.circle;
-                skins.ps4square = sprites.playstation.cross;
-                skins.ps4triangle = sprites.playstation.triangle;
+                skins.ps4x = FaceButtonSprites.playstation.square;
+                skins.ps4circle = FaceButtonSprites.playstation.circle;
+                skins.ps4square = FaceButtonSprites.playstation.cross;
+                skins.ps4triangle = FaceButtonSprites.playstation.triangle;
 
-                skins.switchHidA = sprites.nintendo.x;
-                skins.switchHidB = sprites.nintendo.b;
-                skins.switchHidX = sprites.nintendo.a;
-                skins.switchHidY = sprites.nintendo.y;
+                skins.switchHidA = FaceButtonSprites.nintendo.x;
+                skins.switchHidB = FaceButtonSprites.nintendo.b;
+                skins.switchHidX = FaceButtonSprites.nintendo.a;
+                skins.switchHidY = FaceButtonSprites.nintendo.y;
 
                 foreach (var positions in positionsComponents)
                 {
@@ -235,20 +237,20 @@ public partial class GamepadUISwitcherPlugin : BaseUnityPlugin
             }
             case GamepadButtonSwapOption.BY:
             {
-                skins.a = sprites.xbox.a;
-                skins.b = sprites.xbox.y;
-                skins.x = sprites.xbox.x;
-                skins.y = sprites.xbox.b;
+                skins.a = FaceButtonSprites.xbox.a;
+                skins.b = FaceButtonSprites.xbox.y;
+                skins.x = FaceButtonSprites.xbox.x;
+                skins.y = FaceButtonSprites.xbox.b;
 
-                skins.ps4x = sprites.playstation.cross;
-                skins.ps4circle = sprites.playstation.triangle;
-                skins.ps4square = sprites.playstation.square;
-                skins.ps4triangle = sprites.playstation.circle;
+                skins.ps4x = FaceButtonSprites.playstation.cross;
+                skins.ps4circle = FaceButtonSprites.playstation.triangle;
+                skins.ps4square = FaceButtonSprites.playstation.square;
+                skins.ps4triangle = FaceButtonSprites.playstation.circle;
 
-                skins.switchHidA = sprites.nintendo.a;
-                skins.switchHidB = sprites.nintendo.y;
-                skins.switchHidX = sprites.nintendo.x;
-                skins.switchHidY = sprites.nintendo.b;
+                skins.switchHidA = FaceButtonSprites.nintendo.a;
+                skins.switchHidB = FaceButtonSprites.nintendo.y;
+                skins.switchHidX = FaceButtonSprites.nintendo.x;
+                skins.switchHidY = FaceButtonSprites.nintendo.b;
 
                 foreach (var positions in positionsComponents)
                 {
@@ -261,20 +263,20 @@ public partial class GamepadUISwitcherPlugin : BaseUnityPlugin
             }
             case GamepadButtonSwapOption.BX_AY:
             {
-                skins.a = sprites.xbox.y;
-                skins.b = sprites.xbox.x;
-                skins.x = sprites.xbox.b;
-                skins.y = sprites.xbox.a;
+                skins.a = FaceButtonSprites.xbox.y;
+                skins.b = FaceButtonSprites.xbox.x;
+                skins.x = FaceButtonSprites.xbox.b;
+                skins.y = FaceButtonSprites.xbox.a;
 
-                skins.ps4x = sprites.playstation.triangle;
-                skins.ps4circle = sprites.playstation.square;
-                skins.ps4square = sprites.playstation.circle;
-                skins.ps4triangle = sprites.playstation.cross;
+                skins.ps4x = FaceButtonSprites.playstation.triangle;
+                skins.ps4circle = FaceButtonSprites.playstation.square;
+                skins.ps4square = FaceButtonSprites.playstation.circle;
+                skins.ps4triangle = FaceButtonSprites.playstation.cross;
 
-                skins.switchHidA = sprites.nintendo.y;
-                skins.switchHidB = sprites.nintendo.x;
-                skins.switchHidX = sprites.nintendo.b;
-                skins.switchHidY = sprites.nintendo.a;
+                skins.switchHidA = FaceButtonSprites.nintendo.y;
+                skins.switchHidB = FaceButtonSprites.nintendo.x;
+                skins.switchHidX = FaceButtonSprites.nintendo.b;
+                skins.switchHidY = FaceButtonSprites.nintendo.a;
 
                 foreach (var positions in positionsComponents)
                 {
@@ -288,20 +290,20 @@ public partial class GamepadUISwitcherPlugin : BaseUnityPlugin
             }
             case GamepadButtonSwapOption.BX:
             {
-                skins.a = sprites.xbox.a;
-                skins.b = sprites.xbox.x;
-                skins.x = sprites.xbox.b;
-                skins.y = sprites.xbox.y;
+                skins.a = FaceButtonSprites.xbox.a;
+                skins.b = FaceButtonSprites.xbox.x;
+                skins.x = FaceButtonSprites.xbox.b;
+                skins.y = FaceButtonSprites.xbox.y;
 
-                skins.ps4x = sprites.playstation.cross;
-                skins.ps4circle = sprites.playstation.square;
-                skins.ps4square = sprites.playstation.circle;
-                skins.ps4triangle = sprites.playstation.triangle;
+                skins.ps4x = FaceButtonSprites.playstation.cross;
+                skins.ps4circle = FaceButtonSprites.playstation.square;
+                skins.ps4square = FaceButtonSprites.playstation.circle;
+                skins.ps4triangle = FaceButtonSprites.playstation.triangle;
 
-                skins.switchHidA = sprites.nintendo.a;
-                skins.switchHidB = sprites.nintendo.x;
-                skins.switchHidX = sprites.nintendo.b;
-                skins.switchHidY = sprites.nintendo.y;
+                skins.switchHidA = FaceButtonSprites.nintendo.a;
+                skins.switchHidB = FaceButtonSprites.nintendo.x;
+                skins.switchHidX = FaceButtonSprites.nintendo.b;
+                skins.switchHidY = FaceButtonSprites.nintendo.y;
                 
                 foreach (var positions in positionsComponents)
                 {
@@ -315,20 +317,20 @@ public partial class GamepadUISwitcherPlugin : BaseUnityPlugin
             }
             case GamepadButtonSwapOption.AY:
             {
-                skins.a = sprites.xbox.y;
-                skins.b = sprites.xbox.b;
-                skins.x = sprites.xbox.x;
-                skins.y = sprites.xbox.a;
+                skins.a = FaceButtonSprites.xbox.y;
+                skins.b = FaceButtonSprites.xbox.b;
+                skins.x = FaceButtonSprites.xbox.x;
+                skins.y = FaceButtonSprites.xbox.a;
 
-                skins.ps4x = sprites.playstation.triangle;
-                skins.ps4circle = sprites.playstation.circle;
-                skins.ps4square = sprites.playstation.square;
-                skins.ps4triangle = sprites.playstation.cross;
+                skins.ps4x = FaceButtonSprites.playstation.triangle;
+                skins.ps4circle = FaceButtonSprites.playstation.circle;
+                skins.ps4square = FaceButtonSprites.playstation.square;
+                skins.ps4triangle = FaceButtonSprites.playstation.cross;
 
-                skins.switchHidA = sprites.nintendo.y;
-                skins.switchHidB = sprites.nintendo.b;
-                skins.switchHidX = sprites.nintendo.x;
-                skins.switchHidY = sprites.nintendo.a;
+                skins.switchHidA = FaceButtonSprites.nintendo.y;
+                skins.switchHidB = FaceButtonSprites.nintendo.b;
+                skins.switchHidX = FaceButtonSprites.nintendo.x;
+                skins.switchHidY = FaceButtonSprites.nintendo.a;
                 
                 foreach (var positions in positionsComponents)
                 {
@@ -342,8 +344,5 @@ public partial class GamepadUISwitcherPlugin : BaseUnityPlugin
             default:
                 throw new ArgumentOutOfRangeException();
         }
-        Logger.LogInfo("Swapped buttons");
-        var temp = GamepadType.NONE;
-        UIManager.instance.controllerDetect.ShowController(temp);
     }
 }

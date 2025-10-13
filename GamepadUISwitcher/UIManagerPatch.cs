@@ -76,5 +76,7 @@ public class UIManagerPatch
             forceEnable = false,
         };
         UI.Utils.InsertAfter(ref menuButtonListComp.entries, skinOptionEntry, swapButtonEntry);
+        
+        GamepadUISwitcherPlugin.SwapButtons();
     }
 }

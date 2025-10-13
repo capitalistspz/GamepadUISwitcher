@@ -4,57 +4,52 @@ using UnityEngine.U2D;
 
 namespace GamepadUISwitcher;
 
-public class FaceButtonSprites
+public static class FaceButtonSprites
 {
-    public (Sprite a, Sprite b, Sprite x, Sprite y) nintendo;
-    public (Sprite cross, Sprite circle, Sprite triangle, Sprite square) playstation;
-    public (Sprite a, Sprite b, Sprite x, Sprite y) xbox;
-
-    public FaceButtonSprites()
+    public class Buttons
     {
-        foreach (var sprite in Resources.FindObjectsOfTypeAll<Sprite>())
-        {
-            switch (sprite.name)
-            {
-                case "controller__0012_Switch_Y":
-                    nintendo.y = sprite;
-                    break;
-                case "controller__013_Switch_X":
-                    nintendo.x = sprite;
-                    break;
-                case "controller__0014_Switch_B":
-                    nintendo.b = sprite;
-                    break;
-                case "controller_0015_Switch_A":
-                    nintendo.a = sprite;
-                    break;
-                case "PS4_button_skins_circle":
-                    playstation.circle = sprite;
-                    break;
-                case "PS4_button_skins_square":
-                    playstation.square = sprite;
-                    break;
-                case "PS4_button_skins_triangle":
-                    playstation.triangle = sprite;
-                    break;
-                case "PS4_button_skins_x":
-                    playstation.cross = sprite;
-                    break;
-                case "controller_button_skins_0020_B":
-                    xbox.b = sprite;
-                    break;
-                case "controller_button_skins_0021_A":
-                    xbox.a = sprite;
-                    break;
-                case "controller_button_skins_0022_Y":
-                    xbox.y = sprite;
-                    break;
-                case "controller_button_skins_0023_X":
-                    xbox.x = sprite;
-                    break;
-            }
+        public Sprite a;
+        public Sprite b;
+        public Sprite x;
+        public Sprite y;
+    }
 
-            break;
-        }
+    public class PlaystationButtons
+    {
+        public Sprite cross;
+        public Sprite circle;
+        public Sprite triangle;
+        public Sprite square;
+    }
+    
+    public static Buttons nintendo;
+    public static PlaystationButtons playstation;
+    public static Buttons xbox;
+    
+    public static void LoadSpritesFromUIManager()
+    {
+        var skins = UIManager.instance.uiButtonSkins;
+        xbox.a = skins.a;
+        xbox.b = skins.b;
+        xbox.x = skins.x;
+        xbox.y = skins.y;
+
+        playstation.cross = skins.ps4x;
+        playstation.circle = skins.ps4circle;
+        playstation.square = skins.ps4square;
+        playstation.triangle = skins.ps4triangle;
+
+        nintendo.a = skins.switchHidA;
+        nintendo.b = skins.switchHidB;
+        nintendo.x = skins.switchHidX;
+        nintendo.y = skins.switchHidY;
+    }
+    static FaceButtonSprites()
+    {
+        playstation = new PlaystationButtons();
+        xbox = new Buttons();
+        nintendo = new Buttons();
+        //Reload();
+        LoadSpritesFromUIManager();
     }
 }

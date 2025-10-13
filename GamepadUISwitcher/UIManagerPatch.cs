@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using HarmonyLib;
 using UnityEngine;
@@ -41,8 +42,8 @@ public class UIManagerPatch
         uiSkinSettingObj.transform.SetSiblingIndex(rumbleSettingTransform.GetSiblingIndex() + 1);
         
         var skinOptionObj = UI.Objects.CreateBepinexConfigOptionTranslated("GamepadSkinOption",
-            "GamepadUISwitcher", "SKIN_OPT_LABEL", "SKIN_OPT_DESCRIPTION",
-            GamepadUISwitcherPlugin.GamepadSkinOptions, GamepadUISwitcherPlugin.gamepadSkinConfig);
+            "GamepadUISwitcher/SkinOptions", "SKIN_OPT_LABEL", "SKIN_OPT_DESCRIPTION",
+            (GamepadButtonSkinOpt[])Enum.GetValues(typeof(GamepadButtonSkinOpt)), GamepadUISwitcherPlugin.gamepadSkinConfig);
         
         skinOptionObj.transform.SetParent(uiSkinSettingObj.transform, false);
         
@@ -58,18 +59,19 @@ public class UIManagerPatch
         var rumblePopupOpt = menuButtonListComp.entries.First(entry => entry.selectable.name == "RumblePopupOption");
         UI.Utils.InsertAfter(ref menuButtonListComp.entries, rumblePopupOpt, skinOptionEntry);
 
-        var swapButtonOptionObj = new GameObject("GamepadButtonSwapOption");
-        swapButtonOptionObj.AddComponentIfNotPresent<RectTransform>();
-        swapButtonOptionObj.transform.SetParent(controlsTransform, false);
-        swapButtonOptionObj.transform.SetSiblingIndex(uiSkinSettingObj.transform.GetSiblingIndex() + 1);
+        var swapOptionSetting = new GameObject("GamepadButtonSwapOption");
+        swapOptionSetting.AddComponentIfNotPresent<RectTransform>();
+        swapOptionSetting.transform.SetParent(controlsTransform, false);
+        swapOptionSetting.transform.SetSiblingIndex(uiSkinSettingObj.transform.GetSiblingIndex() + 1);
         
-        var swapButtonObj = UI.Objects.CreateMenuButton("GamepadButtonSwapButton", "Swap Face Button Icons", MenuButton.MenuButtonType.Activate, _ => 
-            GamepadUISwitcherPlugin.SwapXY_AB());
-        swapButtonObj.transform.SetParent(swapButtonOptionObj.transform, false);
+        var swapOptionObj = UI.Objects.CreateBepinexConfigOptionTranslated("GamepadSwapOption", 
+            "GamepadUISwitcher/SwapOptions", "SWAP_OPT_LABEL", "SWAP_OPT_DESCRIPTION",
+            (GamepadButtonSwapOption[])Enum.GetValues(typeof(GamepadButtonSwapOption)), GamepadUISwitcherPlugin.gamepadButtonSwapConfig);
+        swapOptionObj.transform.SetParent(swapOptionSetting.transform, false);
         
         var swapButtonEntry = new MenuButtonList.Entry
         {
-            selectable = swapButtonObj.GetComponent<MenuSelectable>(),
+            selectable = swapOptionObj.GetComponent<MenuSelectable>(),
             alsoAffectParent = true,
             forceEnable = false,
         };

@@ -1,4 +1,7 @@
 # Changelog
+## Version 1.1.1
+- Update README.md
+- Add CHANGELOG.md
 
 ## Version 1.1.0
 - Switched button swap toggle for button swap options

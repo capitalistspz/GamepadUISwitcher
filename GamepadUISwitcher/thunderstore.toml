@@ -21,6 +21,9 @@ target = ""
 [[build.copy]]
 source = "../CHANGELOG.md"
 target = "CHANGELOG.md"
+[[build.copy]]
+source = "./SSL.Localization"
+target = "BepInEx/plugins/SSL.Localization"
 
 [publish]
 repository = "https://thunderstore.io"

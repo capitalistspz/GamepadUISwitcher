@@ -21,7 +21,7 @@
     <PropertyGroup>
         <!--These properties will control the generated plugin info. Version is also used by various parts of the build system.-->
         <AssemblyTitle>GamepadUISwitcher</AssemblyTitle>
-        <Version>1.0.0</Version>
+        <Version>1.1.0</Version>
     </PropertyGroup>
 
     <ItemGroup>
@@ -60,5 +60,11 @@
         <Copy SourceFiles="@(Binaries)" DestinationFolder="$(IntermediateOutputPath)/archive"/>
         <Copy SourceFiles="@(LocalizationFiles)" DestinationFolder="$(IntermediateOutputPath)/archive/SSL.Localization"/>
         <ZipDirectory SourceDirectory="$(IntermediateOutputPath)/archive" DestinationFile="$(ExportFolder)/$(TargetName).zip" Overwrite="True"/>
+    </Target>
+
+    <Target Name="Thunderstore" AfterTargets="PostBuildEvent">
+        <Exec Command="dotnet tool restore" />
+        <Exec Command="dotnet tcli build --package-name &quot;$(AssemblyTitle)&quot; --package-version $(Version)"
+              StandardOutputImportance="High" StandardErrorImportance="High"/>
     </Target>
 </Project>

@@ -1,0 +1,25 @@
+[config]
+schemaVersion = "0.0.1"
+
+[package]
+namespace = "capitalists"
+description = "Switch your gamepad UI. Display the right (or wrong) controls"
+websiteUrl = "https://github.com/capitalistspz/GamepadUISwitcher"
+containsNsfwContent = false
+[package.dependencies]
+BepInEx-BepInExPack_Silksong = "5.4.2304"
+capitalists-SimpleSilksongLocalizer = "0.1.0"
+
+[build]
+icon = "../dist/icon.png"
+readme = "../README.md"
+outdir = "./ts-build"
+[[build.copy]]
+source = "./bin/Debug/netstandard2.1"
+target = ""
+
+[publish]
+repository = "https://thunderstore.io"
+communities = [ "hollow-knight-silksong" ]
+[publish.categories]
+hollow-knight-silksong = [ "mods" ]

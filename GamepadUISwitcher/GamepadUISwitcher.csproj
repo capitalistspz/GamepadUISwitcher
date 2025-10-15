@@ -58,7 +58,7 @@
         <RemoveDir Directories="$(IntermediateOutputPath)/archive"/>
         <MakeDir Directories="$(ExportFolder)"/>
         <Copy SourceFiles="@(Binaries)" DestinationFolder="$(IntermediateOutputPath)/archive"/>
-        <Copy SourceFiles="@(LocalizationFiles)" DestinationFolder="$(IntermediateOutputPath)/archive/SSL.Localization"/>
+        <Copy SourceFiles="@(LocalizationFiles)" DestinationFolder="$(IntermediateOutputPath)/archive/SSL.Localization/%(RecursiveDir)"/>
         <ZipDirectory SourceDirectory="$(IntermediateOutputPath)/archive" DestinationFile="$(ExportFolder)/$(TargetName).zip" Overwrite="True"/>
     </Target>
 

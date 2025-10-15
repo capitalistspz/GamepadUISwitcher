@@ -9,7 +9,7 @@ A mod that allows you to override the UI hints for your game controller.
     - Switch (Joycons, Pro Controller)
     - Xbox (360, One, Series X)
 
-- Swap face buttons (A <-> B, X <-> Y) (Cross <-> Circle, Square <-> Triangle)
+- Swap face buttons, for example: A <-> B, X <-> Y / Cross <-> Circle, Square <-> Triangle
 
 ## Installation
 

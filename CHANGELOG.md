@@ -1,4 +1,7 @@
 # Changelog
+## Version 1.1.2
+- Include localization files in thunderstore package
+
 ## Version 1.1.1
 - Update README.md
 - Add CHANGELOG.md

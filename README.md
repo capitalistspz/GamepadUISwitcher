@@ -27,14 +27,14 @@ Use r2modman or Gale.
 ## Configuration
 
 `Options` -> `Controller` from the game's main menu or pause screen.
-![Switch Pro Menu](./dist/preview/menu-switch-pro.jpg)
+![Switch Pro Menu](https://raw.githubusercontent.com/capitalistspz/GamepadUISwitcher/refs/heads/master/dist/preview/menu-switch-pro.jpg)
 
 Alternatively, if you have `BepInEx.ConfigurationManager` installed, you can use its menu (Default: F1).
 
 ## Preview
 
-![Switch In-game](./dist/preview/ingame-switch.jpg)
+![Switch In-game](https://raw.githubusercontent.com/capitalistspz/GamepadUISwitcher/refs/heads/master/dist/preview/ingame-switch.jpg)
 
-![DualShock 4 Menu](./dist/preview/menu-ds4.jpg)
+![DualShock 4 Menu](https://raw.githubusercontent.com/capitalistspz/GamepadUISwitcher/refs/heads/master/dist/preview/menu-ds4.jpg)
 
-![DualShock 4 Remap](./dist/preview/remap-ds4.jpg)
+![DualShock 4 Remap](https://raw.githubusercontent.com/capitalistspz/GamepadUISwitcher/refs/heads/master/dist/preview/remap-ds4.jpg)

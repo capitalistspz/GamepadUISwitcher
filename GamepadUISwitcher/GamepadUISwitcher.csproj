@@ -40,7 +40,7 @@
         </ItemGroup>
 
         <ItemGroup>
-            <LanguageFiles Include="Language/**" />
+            <LocalizationFiles Include="SSL.Localization/**" />
         </ItemGroup>
 
         <PropertyGroup>
@@ -49,7 +49,7 @@
 
         <Copy SourceFiles="@(Binaries)" DestinationFolder="$(PluginFolder)"/>
         <Copy SourceFiles="@(Binaries)" DestinationFolder="$(PluginFolder)"/>
-        <Copy SourceFiles="@(LanguageFiles)" DestinationFolder="$(PluginFolder)/Language/%(RecursiveDir)"/>
+        <Copy SourceFiles="@(LocalizationFiles)" DestinationFolder="$(PluginFolder)/SSL.Localization/%(RecursiveDir)"/>
 
         <PropertyGroup>
             <ExportFolder>bin/Publish</ExportFolder>
@@ -58,7 +58,7 @@
         <RemoveDir Directories="$(IntermediateOutputPath)/archive"/>
         <MakeDir Directories="$(ExportFolder)"/>
         <Copy SourceFiles="@(Binaries)" DestinationFolder="$(IntermediateOutputPath)/archive"/>
-        <Copy SourceFiles="@(LanguageFiles)" DestinationFolder="$(IntermediateOutputPath)/archive/Language"/>
+        <Copy SourceFiles="@(LocalizationFiles)" DestinationFolder="$(IntermediateOutputPath)/archive/SSL.Localization"/>
         <ZipDirectory SourceDirectory="$(IntermediateOutputPath)/archive" DestinationFile="$(ExportFolder)/$(TargetName).zip" Overwrite="True"/>
     </Target>
 </Project>

@@ -13,10 +13,14 @@ capitalists-SimpleSilksongLocalizer = "0.1.0"
 [build]
 icon = "../dist/icon.png"
 readme = "../README.md"
+changelog = "../CHANGELOG.md"
 outdir = "./ts-build"
 [[build.copy]]
 source = "./bin/Debug/netstandard2.1"
 target = ""
+[[build.copy]]
+source = "../CHANGELOG.md"
+target = "CHANGELOG.md"
 
 [publish]
 repository = "https://thunderstore.io"

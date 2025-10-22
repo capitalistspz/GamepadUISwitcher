@@ -71,7 +71,8 @@ public class BepinexMenuOptionHorizontal : MenuSelectable, IMoveHandler, IEventS
 
 	private new void OnDisable()
 	{
-		GameManager.instance.RefreshLanguageText -= UpdateText;
+		if (GameManager.instance != null)
+			GameManager.instance.RefreshLanguageText -= UpdateText;
 		if (configEntry != null)
 		{
 			var evInfo = configEntry.GetType().GetEvent("SettingChanged");

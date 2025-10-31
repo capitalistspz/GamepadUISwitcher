@@ -1,9 +1,0 @@
-{
-  "CustomSheets": [
-    "GamepadUISwitcher/SkinOptions",
-    "GamepadUISwitcher/SwapOptions"
-  ],
-  "Fallback": {
-    "Language": "EN"
-  }
-}

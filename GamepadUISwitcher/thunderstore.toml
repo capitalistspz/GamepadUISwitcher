@@ -8,7 +8,7 @@ websiteUrl = "https://github.com/capitalistspz/GamepadUISwitcher"
 containsNsfwContent = false
 [package.dependencies]
 BepInEx-BepInExPack_Silksong = "5.4.2304"
-capitalists-SimpleSilksongLocalizer = "0.1.0"
+silksong_modding-I18N = "1.0.1"
 
 [build]
 icon = "../dist/icon.png"
@@ -22,8 +22,8 @@ target = ""
 source = "../CHANGELOG.md"
 target = "CHANGELOG.md"
 [[build.copy]]
-source = "./SSL.Localization"
-target = "BepInEx/plugins/SSL.Localization"
+source = "./languages"
+target = "BepInEx/plugins/languages"
 
 [publish]
 repository = "https://thunderstore.io"

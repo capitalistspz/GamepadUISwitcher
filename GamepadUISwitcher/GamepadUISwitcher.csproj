@@ -23,6 +23,9 @@
         <AssemblyTitle>GamepadUISwitcher</AssemblyTitle>
         <Version>1.1.2</Version>
     </PropertyGroup>
+    <PropertyGroup>
+        <NeutralLanguage>EN</NeutralLanguage>
+    </PropertyGroup>
 
     <ItemGroup>
         <PackageReference Include="BepInEx.Analyzers" Version="1.0.8" PrivateAssets="all"/>
@@ -32,7 +35,7 @@
         <!--If you're unable resolve this dependency, check that you're using the nuget v3 package feed instead of v2.-->
         <PackageReference Include="Silksong.GameLibs" Version="1.1.0-silksong1.0.28714" />
     </ItemGroup>
-
+    
     <Target Name="CopyMod" AfterTargets="PostBuildEvent" Condition="'$(SilksongFolder)' != ''">
         <ItemGroup>
             <Binaries Include="$(TargetPath)"/>
@@ -40,7 +43,7 @@
         </ItemGroup>
 
         <ItemGroup>
-            <LocalizationFiles Include="SSL.Localization/**" />
+            <LanguageFiles Include="languages/**" />
         </ItemGroup>
 
         <PropertyGroup>
@@ -49,7 +52,7 @@
 
         <Copy SourceFiles="@(Binaries)" DestinationFolder="$(PluginFolder)"/>
         <Copy SourceFiles="@(Binaries)" DestinationFolder="$(PluginFolder)"/>
-        <Copy SourceFiles="@(LocalizationFiles)" DestinationFolder="$(PluginFolder)/SSL.Localization/%(RecursiveDir)"/>
+        <Copy SourceFiles="@(LanguageFiles)" DestinationFolder="$(PluginFolder)/languages/%(RecursiveDir)"/>
 
         <PropertyGroup>
             <ExportFolder>bin/Publish</ExportFolder>
@@ -58,7 +61,7 @@
         <RemoveDir Directories="$(IntermediateOutputPath)/archive"/>
         <MakeDir Directories="$(ExportFolder)"/>
         <Copy SourceFiles="@(Binaries)" DestinationFolder="$(IntermediateOutputPath)/archive"/>
-        <Copy SourceFiles="@(LocalizationFiles)" DestinationFolder="$(IntermediateOutputPath)/archive/SSL.Localization/%(RecursiveDir)"/>
+        <Copy SourceFiles="@(LanguageFiles)" DestinationFolder="$(IntermediateOutputPath)/archive/languages/%(RecursiveDir)"/>
         <ZipDirectory SourceDirectory="$(IntermediateOutputPath)/archive" DestinationFile="$(ExportFolder)/$(TargetName).zip" Overwrite="True"/>
     </Target>
 

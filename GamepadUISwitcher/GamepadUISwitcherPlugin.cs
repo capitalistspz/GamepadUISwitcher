@@ -12,6 +12,7 @@ using UnityEngine.UI;
 namespace GamepadUISwitcher;
 
 [BepInAutoPlugin(id: "capitalistspz.gamepaduiswitcher-silksong")]
+[BepInDependency("org.silksong-modding.i18n")]
 public partial class GamepadUISwitcherPlugin : BaseUnityPlugin
 {
     internal new static ManualLogSource Logger;

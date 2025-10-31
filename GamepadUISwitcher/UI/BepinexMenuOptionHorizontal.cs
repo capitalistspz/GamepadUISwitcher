@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using BepInEx.Configuration;
+using GamepadUISwitcher;
 using TeamCherry.Localization;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -154,7 +155,8 @@ public class BepinexMenuOptionHorizontal : MenuSelectable, IMoveHandler, IEventS
 	private string OptionToString(int index)
 	{
 		var opt = optionList[index];
-		return Language.Get(opt.ToString(), sheetTitle);
+		var key = ((Enum)opt).GetLocalizationKey();
+		return Language.Get(key, sheetTitle);
 	}
 
 	public string GetSelectedOptionText()

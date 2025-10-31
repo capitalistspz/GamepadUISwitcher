@@ -1,5 +1,6 @@
 namespace GamepadUISwitcher;
 
+[LocalizationKeyPrefix("SKIN_OPTION.VALUE.")]
 public enum GamepadButtonSkinOpt
 {
     Auto,

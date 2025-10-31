@@ -13,6 +13,8 @@ public class UIManagerPatch
     [HarmonyPostfix]
     public static void OnAwake()
     {
+        const string tlSheet = "Mods." + GamepadUISwitcherPlugin.Id;
+
         var controllerMenuScreen = UIManager.instance.gamepadMenuScreen;
 
         // So that items don't overlap
@@ -42,7 +44,7 @@ public class UIManagerPatch
         uiSkinSettingObj.transform.SetSiblingIndex(rumbleSettingTransform.GetSiblingIndex() + 1);
 
         var skinOptionObj = UI.Objects.CreateBepinexConfigOptionTranslated("GamepadSkinOption",
-            "GamepadUISwitcher/SkinOptions", "SKIN_OPT_LABEL", "SKIN_OPT_DESCRIPTION",
+            tlSheet, "SKIN_OPTION.LABEL", "SKIN_OPTION.DESCRIPTION",
             (GamepadButtonSkinOpt[])Enum.GetValues(typeof(GamepadButtonSkinOpt)),
             GamepadUISwitcherPlugin.gamepadSkinConfig);
 
@@ -60,13 +62,14 @@ public class UIManagerPatch
         var rumblePopupOpt = menuButtonListComp.entries.First(entry => entry.selectable.name == "RumblePopupOption");
         UI.Utils.InsertAfter(ref menuButtonListComp.entries, rumblePopupOpt, skinOptionEntry);
 
+
         var swapOptionSetting = new GameObject("GamepadButtonSwapOption");
         swapOptionSetting.AddComponentIfNotPresent<RectTransform>();
         swapOptionSetting.transform.SetParent(controlsTransform, false);
         swapOptionSetting.transform.SetSiblingIndex(uiSkinSettingObj.transform.GetSiblingIndex() + 1);
 
         var swapOptionObj = UI.Objects.CreateBepinexConfigOptionTranslated("GamepadSwapOption",
-            "GamepadUISwitcher/SwapOptions", "SWAP_OPTION.LABEL", "SWAP_OPTION.DESCRIPTION",
+            tlSheet, "SWAP_OPTION.LABEL", "SWAP_OPTION.DESCRIPTION",
             (GamepadButtonSwapOption[])Enum.GetValues(typeof(GamepadButtonSwapOption)),
             GamepadUISwitcherPlugin.gamepadButtonSwapConfig);
         swapOptionObj.transform.SetParent(swapOptionSetting.transform, false);

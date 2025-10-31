@@ -15,10 +15,10 @@ namespace GamepadUISwitcher;
 public partial class GamepadUISwitcherPlugin : BaseUnityPlugin
 {
     internal new static ManualLogSource Logger;
-    
+
     internal static ConfigEntry<GamepadButtonSkinOpt> gamepadSkinConfig;
     internal static ConfigEntry<GamepadButtonSwapOption> gamepadButtonSwapConfig;
-    
+
     internal static GamepadType SelectedGamepadType => gamepadSkinConfig.Value switch
     {
         GamepadButtonSkinOpt.Xbox360 => GamepadType.XBOX_360,
@@ -33,11 +33,11 @@ public partial class GamepadUISwitcherPlugin : BaseUnityPlugin
         GamepadButtonSkinOpt.SteamDeck => GamepadType.STEAM_DECK,
         _ => UIManager.instance.ih.activeGamepadType
     };
-    
+
     private void Awake()
     {
         Logger = base.Logger;
-        
+
         gamepadSkinConfig = Config.Bind("UI", "Gamepad Skin", GamepadButtonSkinOpt.Auto);
         gamepadSkinConfig.SettingChanged += (_, _) =>
         {
@@ -48,21 +48,16 @@ public partial class GamepadUISwitcherPlugin : BaseUnityPlugin
 
         gamepadButtonSwapConfig = Config.Bind("UI", "Button Swap", GamepadButtonSwapOption.None);
         gamepadButtonSwapConfig.SettingChanged += (_, _) =>
-        {;
+        {
+            ;
             SetButtonSwapOptions();
             UIManager.instance.controllerDetect.ShowController(GamepadType.NONE);
         };
-        
+
         var harmony = Harmony.CreateAndPatchAll(typeof(UIManagerPatch));
         harmony.PatchAll(typeof(ButtonSkinsPatch));
         harmony.PatchAll(typeof(ControllerDetectPatch));
         Logger.LogInfo($"Plugin {Name} ({Id}) has loaded!");
-    }
-
-    public static void OnUILoad()
-    {
-        InsertSettingsUI();
-        SetButtonSwapOptions();
     }
 
     public static void SetButtonSwapOptions()
@@ -72,13 +67,13 @@ public partial class GamepadUISwitcherPlugin : BaseUnityPlugin
             "Xbox360Buttons", "XboxOneButtons", "PS4Buttons", "SwitchJoyconButtons", "Switch2JoyconButtons",
             "SwitchProControllerButtons", "PS5Buttons", "XboxSeriesXButtons", "SteamDeckButtons"
         ];
-        
+
         var skins = UIManager.instance.uiButtonSkins;
 
         var positionsComponents = buttonsObjNames
             .Select(objName => UIManager.instance.gamepadMenuScreen.transform
                 .Find($"Content/ControllerProfiles/{objName}").GetComponent<ControllerButtonPositions>());
-       
+
         var opt = gamepadButtonSwapConfig.Value;
         switch (opt)
         {
@@ -105,7 +100,7 @@ public partial class GamepadUISwitcherPlugin : BaseUnityPlugin
                     positions.action3.controllerButton = InputControlType.Action3;
                     positions.action4.controllerButton = InputControlType.Action4;
                 }
-                
+
                 break;
             }
             case GamepadButtonSwapOption.AB_XY:
@@ -119,7 +114,7 @@ public partial class GamepadUISwitcherPlugin : BaseUnityPlugin
                 skins.ps4circle = FaceButtonSprites.playstation.cross;
                 skins.ps4square = FaceButtonSprites.playstation.triangle;
                 skins.ps4triangle = FaceButtonSprites.playstation.square;
-                
+
                 skins.switchHidA = FaceButtonSprites.nintendo.b;
                 skins.switchHidB = FaceButtonSprites.nintendo.a;
                 skins.switchHidX = FaceButtonSprites.nintendo.y;
@@ -240,6 +235,7 @@ public partial class GamepadUISwitcherPlugin : BaseUnityPlugin
                     positions.action3.controllerButton = InputControlType.Action1;
                     positions.action4.controllerButton = InputControlType.Action4;
                 }
+
                 break;
             }
             case GamepadButtonSwapOption.BY:
@@ -266,6 +262,7 @@ public partial class GamepadUISwitcherPlugin : BaseUnityPlugin
                     positions.action3.controllerButton = InputControlType.Action3;
                     positions.action4.controllerButton = InputControlType.Action2;
                 }
+
                 break;
             }
             case GamepadButtonSwapOption.BX_AY:
@@ -311,7 +308,7 @@ public partial class GamepadUISwitcherPlugin : BaseUnityPlugin
                 skins.switchHidB = FaceButtonSprites.nintendo.x;
                 skins.switchHidX = FaceButtonSprites.nintendo.b;
                 skins.switchHidY = FaceButtonSprites.nintendo.y;
-                
+
                 foreach (var positions in positionsComponents)
                 {
                     positions.action1.controllerButton = InputControlType.Action1;
@@ -338,7 +335,7 @@ public partial class GamepadUISwitcherPlugin : BaseUnityPlugin
                 skins.switchHidB = FaceButtonSprites.nintendo.b;
                 skins.switchHidX = FaceButtonSprites.nintendo.x;
                 skins.switchHidY = FaceButtonSprites.nintendo.a;
-                
+
                 foreach (var positions in positionsComponents)
                 {
                     positions.action1.controllerButton = InputControlType.Action4;
@@ -346,77 +343,11 @@ public partial class GamepadUISwitcherPlugin : BaseUnityPlugin
                     positions.action3.controllerButton = InputControlType.Action3;
                     positions.action4.controllerButton = InputControlType.Action1;
                 }
+
                 break;
             }
             default:
                 throw new ArgumentOutOfRangeException();
         }
-    }
-
-    public static void InsertSettingsUI()
-    {
-        var controllerMenuScreen = UIManager.instance.gamepadMenuScreen;
-        
-        // So that items don't overlap
-        var layoutGroupComp = controllerMenuScreen.gameObject.AddComponentIfNotPresent<VerticalLayoutGroup>();
-        layoutGroupComp.childAlignment = TextAnchor.MiddleCenter;
-        layoutGroupComp.childForceExpandHeight = false;
-        layoutGroupComp.childForceExpandWidth = false;
-        layoutGroupComp.childScaleHeight = true;
-        layoutGroupComp.childControlHeight = false;
-        
-        // "Content" object is unnecessarily large, shrink it to size of its child
-        var contentTransform = controllerMenuScreen.transform.Find("Content") as RectTransform;
-        var profilesTransform = contentTransform!.Find("ControllerProfiles") as RectTransform;
-        contentTransform.sizeDelta = profilesTransform!.sizeDelta;
-        
-        // Shrink spacing so that more elements can be added
-        var controlsTransform = controllerMenuScreen.transform.Find("Controls");
-        var controlsLayoutGroupComp = controlsTransform.GetComponent<VerticalLayoutGroup>();
-        controlsLayoutGroupComp.spacing *= 0.75f;
-        controlsLayoutGroupComp.childAlignment = TextAnchor.MiddleCenter;
-        
-        var rumbleSettingTransform = controlsTransform.Find("RumbleSetting");
-
-        var uiSkinSettingObj = new GameObject("GamepadSkinSetting");
-        uiSkinSettingObj.AddComponentIfNotPresent<RectTransform>();
-        uiSkinSettingObj.transform.SetParent(controlsTransform, false);
-        uiSkinSettingObj.transform.SetSiblingIndex(rumbleSettingTransform.GetSiblingIndex() + 1);
-        
-        var skinOptionObj = UI.Objects.CreateBepinexConfigOptionTranslated("GamepadSkinOption",
-            "GamepadUISwitcher/SkinOptions", "SKIN_OPT_LABEL", "SKIN_OPT_DESCRIPTION",
-            (GamepadButtonSkinOpt[])Enum.GetValues(typeof(GamepadButtonSkinOpt)), GamepadUISwitcherPlugin.gamepadSkinConfig);
-        
-        skinOptionObj.transform.SetParent(uiSkinSettingObj.transform, false);
-        
-        var skinOptionEntry = new MenuButtonList.Entry
-        {
-            selectable = skinOptionObj.GetComponent<MenuSelectable>(),
-            alsoAffectParent = true,
-            forceEnable = false,
-            condition = null
-        };
-        
-        var menuButtonListComp = controllerMenuScreen.GetComponent<MenuButtonList>();
-        var rumblePopupOpt = menuButtonListComp.entries.First(entry => entry.selectable.name == "RumblePopupOption");
-        UI.Utils.InsertAfter(ref menuButtonListComp.entries, rumblePopupOpt, skinOptionEntry);
-
-        var swapOptionSetting = new GameObject("GamepadButtonSwapOption");
-        swapOptionSetting.AddComponentIfNotPresent<RectTransform>();
-        swapOptionSetting.transform.SetParent(controlsTransform, false);
-        swapOptionSetting.transform.SetSiblingIndex(uiSkinSettingObj.transform.GetSiblingIndex() + 1);
-        
-        var swapOptionObj = UI.Objects.CreateBepinexConfigOptionTranslated("GamepadSwapOption", 
-            "GamepadUISwitcher/SwapOptions", "SWAP_OPT_LABEL", "SWAP_OPT_DESCRIPTION",
-            (GamepadButtonSwapOption[])Enum.GetValues(typeof(GamepadButtonSwapOption)), GamepadUISwitcherPlugin.gamepadButtonSwapConfig);
-        swapOptionObj.transform.SetParent(swapOptionSetting.transform, false);
-        
-        var swapButtonEntry = new MenuButtonList.Entry
-        {
-            selectable = swapOptionObj.GetComponent<MenuSelectable>(),
-            alsoAffectParent = true,
-            forceEnable = false,
-        };
-        UI.Utils.InsertAfter(ref menuButtonListComp.entries, skinOptionEntry, swapButtonEntry);
     }
 }

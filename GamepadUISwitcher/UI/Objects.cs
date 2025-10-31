@@ -110,7 +110,6 @@ public static class Objects
                 cursorLeftObj.transform.SetParent(menuButtonTextObj.transform, false);
             }
         }
-        UnityEngine.Object.DontDestroyOnLoad(buttonObj);
         return buttonObj;
     }
     
@@ -263,7 +262,6 @@ public static class Objects
             menuOptionComp.descriptionText = animator;
             descriptionObj.SetActive(true);
         }
-        UnityEngine.Object.DontDestroyOnLoad(optionObj);
         optionObj.SetActive(true);
         return optionObj;
     }

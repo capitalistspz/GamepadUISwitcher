@@ -1,5 +1,6 @@
 namespace GamepadUISwitcher;
 
+[LocalizationKeyPrefix("SWAP_OPTION.VALUE.")]
 public enum GamepadButtonSwapOption
 {
     None,

@@ -18,7 +18,7 @@ Use r2modman or Gale.
 
 ### Manual
 1. Download [BepInExPack Silksong](https://thunderstore.io/c/hollow-knight-silksong/p/BepInEx/BepInExPack_Silksong/) and extract it to the game folder, next to the game executable
-2. Download [SimpleSilksongLocalizer](https://thunderstore.io/c/hollow-knight-silksong/p/capitalists/SimpleSilksongLocalizer/) and extract it inside of `<game folder>/BepInEx/plugins`
+2. Download [Silksong.I18N](https://thunderstore.io/c/hollow-knight-silksong/p/silksong_modding/I18N/) and extract it inside of `<game folder>/BepInEx/plugins`
 3. Download [GamepadUISwitcher.zip](https://github.com/capitalistspz/GamepadUISwitcher/releases/latest) and extract it inside of `<game folder>/BepInEx/plugins`
 4.
     - (Windows) Run the game normally

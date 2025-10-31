@@ -1,0 +1,28 @@
+{
+  "SKIN_OPTION.VALUE.Auto": "Auto",
+  "SKIN_OPTION.VALUE.Xbox360": "Xbox 360",
+  "SKIN_OPTION.VALUE.XboxOne": "Xbox One",
+  "SKIN_OPTION.VALUE.XboxSeriesX": "Xbox Series X",
+  "SKIN_OPTION.VALUE.DualShock4" : "DualShock 4",
+  "SKIN_OPTION.VALUE.DualSense": "DualSense",
+  "SKIN_OPTION.VALUE.SwitchJoycons": "Switch Joy-Cons",
+  "SKIN_OPTION.VALUE.Switch2Joycons": "Switch 2 Joy-Cons",
+  "SKIN_OPTION.VALUE.SwitchPro": "Switch Pro",
+  "SKIN_OPTION.VALUE.Switch2Pro": "Switch 2 Pro",
+  "SKIN_OPTION.VALUE.SteamDeck": "Steam Deck",
+  "SKIN_OPTION.LABEL": "Gamepad Skin",
+  "SKIN_OPTION.DESCRIPTION": "Select how the gamepad UI should look",
+  
+  "SWAP_OPTION.VALUE.None": "None",
+  "SWAP_OPTION.VALUE.AB_XY": "A<->B, X<->Y",
+  "SWAP_OPTION.VALUE.AB": "A<->B",
+  "SWAP_OPTION.VALUE.XY": "X<->Y",
+  "SWAP_OPTION.VALUE.AX_BY": "A<->X, B<->Y",
+  "SWAP_OPTION.VALUE.AX": "A<->X",
+  "SWAP_OPTION.VALUE.BY": "B<->Y",
+  "SWAP_OPTION.VALUE.BX_AY": "B<->X, A<->Y",
+  "SWAP_OPTION.VALUE.BX": "B<->X",
+  "SWAP_OPTION.VALUE.AY": "A<->Y",
+  "SWAP_OPTION.LABEL": "Swapped Buttons",
+  "SWAP_OPTION.DESCRIPTION": "Select which buttons are swapped in the UI"
+}

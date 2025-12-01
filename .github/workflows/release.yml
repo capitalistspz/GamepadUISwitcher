@@ -24,7 +24,7 @@ jobs:
         #working-directory: ./GamepadUISwitcher
         run: |
           dotnet build --no-restore --configuration Release
-          ls
+          tree
         
       - name: Create release
         uses: "softprops/action-gh-release@v2"

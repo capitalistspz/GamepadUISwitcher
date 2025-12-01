@@ -1,0 +1,31 @@
+name: Build and Create Release
+on:
+  tags:
+    - "*"
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: master
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 9.0.x
+      - name: Restore dependencies
+        run: dotnet restore
+        working-directory: GamepadUISwitcher
+      - name: Build
+        run: dotnet build --no-restore --configuration Release
+        working-directory: GamepadUISwitcher
+      - name: Create release
+      - uses: "marvinpinto/action-automatic-releases@latest"
+        working-directory: GamepadUISwitcher
+        with:
+          repo_token: "${{ secrets.GITHUB_TOKEN }}"
+          prerelease: false
+          files: |
+            ts-build/*.zip
+            bin/Publish/*.zip

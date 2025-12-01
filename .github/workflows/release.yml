@@ -25,10 +25,11 @@ jobs:
         run: dotnet build --no-restore --configuration Release
         
       - name: Create release
-      - uses: "marvinpinto/action-automatic-releases@latest"
+        uses: "marvinpinto/action-automatic-releases@latest"
+        working-directory: ./GamepadUISwitcher
         with:
           repo_token: "${{ secrets.GITHUB_TOKEN }}"
           prerelease: false
           files: |
-            GamepadUISwitcher/ts-build/*.zip
-            GamepadUISwitcher/bin/Publish/*.zip
+            ts-build/*.zip
+            bin/Publish/*.zip

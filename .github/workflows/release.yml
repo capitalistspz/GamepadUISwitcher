@@ -15,15 +15,18 @@ jobs:
         uses: actions/setup-dotnet@v4
         with:
           dotnet-version: 9.0.x
+          
       - name: Restore dependencies
+        working-directory: ./GamepadUISwitcher
         run: dotnet restore
-        working-directory: GamepadUISwitcher
+        
       - name: Build
+        working-directory: ./GamepadUISwitcher
         run: dotnet build --no-restore --configuration Release
-        working-directory: GamepadUISwitcher
+        
       - name: Create release
       - uses: "marvinpinto/action-automatic-releases@latest"
-        working-directory: GamepadUISwitcher
+        working-directory: ./GamepadUISwitcher
         with:
           repo_token: "${{ secrets.GITHUB_TOKEN }}"
           prerelease: false

@@ -31,6 +31,6 @@ jobs:
         with:
           fail_on_unmatched_files: true
           files: |
-            bin/Publish/GamepadUISwitcher.zip
+            GamepadUISwitcher/bin/Publish/GamepadUISwitcher.zip
             GamepadUISwitcher/ts-build/*.zip
             

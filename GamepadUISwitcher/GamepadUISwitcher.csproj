@@ -36,7 +36,7 @@
         <PackageReference Include="Silksong.GameLibs" Version="1.1.0-silksong1.0.28714" />
     </ItemGroup>
     
-    <Target Name="CopyMod" AfterTargets="PostBuildEvent" Condition="'$(SilksongFolder)' != ''">
+    <Target Name="CopyMod" AfterTargets="PostBuildEvent">
         <ItemGroup>
             <Binaries Include="$(TargetPath)"/>
             <Binaries Include="$(TargetDir)/$(TargetName).pdb"/>
@@ -46,12 +46,12 @@
             <LanguageFiles Include="languages/**" />
         </ItemGroup>
 
-        <PropertyGroup>
+        <PropertyGroup Condition="'$(SilksongFolder)' != ''">
             <PluginFolder>$(SilksongFolder)/BepInEx/plugins/$(TargetName)</PluginFolder>
         </PropertyGroup>
 
-        <Copy SourceFiles="@(Binaries)" DestinationFolder="$(PluginFolder)"/>
-        <Copy SourceFiles="@(LanguageFiles)" DestinationFolder="$(PluginFolder)/languages/%(RecursiveDir)"/>
+        <Copy SourceFiles="@(Binaries)" DestinationFolder="$(PluginFolder)" Condition="'$(SilksongFolder)' != ''"/>
+        <Copy SourceFiles="@(LanguageFiles)" DestinationFolder="$(PluginFolder)/languages/%(RecursiveDir)" Condition="'$(SilksongFolder)' != ''"/>
 
         <PropertyGroup>
             <ExportFolder>bin/Publish</ExportFolder>

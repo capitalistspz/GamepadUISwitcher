@@ -16,7 +16,7 @@ readme = "../README.md"
 changelog = "../CHANGELOG.md"
 outdir = "./ts-build"
 [[build.copy]]
-source = "./bin/Debug/netstandard2.1"
+source = "./bin/Release/netstandard2.1"
 target = ""
 [[build.copy]]
 source = "../CHANGELOG.md"

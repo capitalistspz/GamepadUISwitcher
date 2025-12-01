@@ -1,4 +1,7 @@
 # Changelog
+## Version 1.2.1
+- Use the correct binaries in the releases now
+
 ## Version 1.2.0
 - Migrate to [Silksong.I18N](https://thunderstore.io/c/hollow-knight-silksong/p/silksong_modding/I18N/) for translatable text
 - Eliminate `DontDestroyOnLoad` warning caused by this mod (other mods may still produce them)

@@ -22,11 +22,14 @@ jobs:
         
       - name: Build
         #working-directory: ./GamepadUISwitcher
-        run: dotnet build --no-restore --configuration Release
+        run: |
+          dotnet build --no-restore --configuration Release
+          ls
         
       - name: Create release
         uses: "softprops/action-gh-release@v2"
         with:
+          fail_on_unmatched_files: true
           files: |
             bin/Publish/GamepadUISwitcher.zip
             GamepadUISwitcher/ts-build/*.zip

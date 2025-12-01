@@ -28,6 +28,6 @@ jobs:
         uses: "softprops/action-gh-release@v2"
         with:
           files: |
-            GamepadUISwitcher/bin/Publish/GamepadUISwitcher.zip
+            bin/Publish/GamepadUISwitcher.zip
             GamepadUISwitcher/ts-build/*.zip
             
